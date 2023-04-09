@@ -1,0 +1,41 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using TurboProject.Models.Entities.Identity
+
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <div class="nav-right-button">
+        <ul class="user-action-wrap d-flex align-items-center">
+            <li class="dropdown user-dropdown">
+                <a class="nav-link dropdown-toggle dropdown--toggle pl-2" href="#" id="userMenuDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="media media-card media--card shadow-none mb-0 rounded-0 align-items-center bg-transparent">
+                        <div class="media-img media-img-xs flex-shrink-0 rounded-full mr-2">
+                            <div class=" icon-element icon-element-xs ">
+                                <i class="la la-user"></i>
+                            </div>
+                        </div>
+                        <div class="media-body p-0 border-left-0">
+                            <h5 class=" dropdown-toggle" style="color:white;">@UserManager.GetUserName(User)</h5>
+                        </div>
+                    </div>
+                </a>
+                <div class="dropdown-menu dropdown--menu dropdown-menu-right mt-3 keep-open" aria-labelledby="userMenuDropdown">
+                    <h6 class="dropdown-header">Hi, @UserManager.GetUserName(User)</h6>
+                    <div class="dropdown-divider border-top-gray mb-0"></div>
+                    <div class="dropdown-item-list">
+                        <a class="dropdown-item" asp-controller="Account" asp-action="MyAnnouncement"><i class="las la-bullhorn mr-2"></i>Announcement</a>
+                        <a class="dropdown-item" asp-controller="Auth" asp-action="Logout"><i class="la la-power-off mr-2"></i>Logout</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+}
+else
+{
+    <a id="login"  asp-controller="Auth" asp-action="Login" class="btn theme-btn theme-btn-outline theme-btn-outline-white mr-2"><i class="la la-sign-in mr-1"></i> Login</a>
+    <a id="register" asp-controller="Auth" asp-action="Register"  class="btn theme-btn theme-btn-white"><i class="la la-user mr-1"></i> Sign up</a>
+}
+

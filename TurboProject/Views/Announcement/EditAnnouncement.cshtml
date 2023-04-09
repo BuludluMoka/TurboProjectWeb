@@ -1,0 +1,163 @@
+﻿@model EditAnnouncementModel
+<style>
+    .del {
+        position: absolute;
+        top: 0px;
+        right: 15px;
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        background-color: rgba(255,255,255,0.6);
+        cursor: pointer;
+    }
+
+    .imgAdd {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        color: black;
+        box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.2);
+        text-align: center;
+        line-height: 30px;
+        margin-top: 0px;
+        cursor: pointer;
+        font-size: 15px;
+    }
+</style>
+<form asp-controller="Announcement" asp-action="EditAnnouncement" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="AnnouncementId" value="@Model.AnnouncementId" />
+    <div class="col-md-10 offset-md-1">
+        <h3 class="mt-2">Announcement Details</h3>
+        <hr class="my-3">
+        <div asp-validation-summary="All" class="text-danger small"></div>
+        <div class="form-row mt-4">
+            <div class="col-sm-4 pb-3">
+                <label>Marka</label>
+                <select id="Marka" name="MakeId" asp-for="MakeId" required asp-items="@ViewBag.makes" class="form-control">
+                </select>
+                <span asp-validation-for="MakeId" class="text-danger small"></span>
+            </div>
+            <div class="col-sm-4 pb-3">
+                <label>Model</label>
+                <select id="Model" asp-for="ModelId" asp-items="ViewBag.model" required class="form-control" name="ModelId">
+                </select>
+                <span asp-validation-for="ModelId" class="text-danger small"></span>
+            </div>
+
+            <div class="col-sm-4 pb-3">
+                <label>BanType</label>
+                <select id="BanType" name="BanTypeId" asp-for="BanTypeId" required asp-items="@ViewBag.bantypes" class="form-control">
+                </select>
+
+                <span asp-validation-for="BanTypeId" class="text-danger small"></span>
+            </div>
+            <div class="col-sm-4 pb-3">
+                <label>Car Price</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <select id="Currency" name="CurrencyId" asp-for="CurrencyId" asp-items="@ViewBag.currencies" required class="form-control" style="width:90px">
+                        </select>
+                        <input type="number" class="form-control" asp-for="Price">
+
+                    </div>
+                    <span asp-validation-for="Price" class="text-danger small"></span>
+                </div>
+            </div>
+            <div class="col-sm-3 pb-3">
+                <label>Year</label>
+                <div class="input-group">
+                    <select id="year-dropdown" asp-for="Year" required class="form-control" name="Year">
+                    </select>
+                </div>
+                <span asp-validation-for="Year" class="text-danger small"></span>
+            </div>
+        </div>
+        <h3 class="mb-5 mt-5">Announcement Images </h3>
+        <div class="row">
+
+            @foreach (var item in Model.CarImageFiles)
+            {
+                <div class="col-sm-3 mb-3 ">
+                    <div class="card">
+                        <img class="card-img-top a" src="~/MediaUpload/@item" alt="Alternate Text" />
+                        <div class="card-body">
+                            <label class="btn btn-success d-block">
+                                <i class="las la-2x la-cloud-upload-alt"></i>
+                                <input name="files" type="file" class="uploadFile d-block" style="width: 0px;height: 0px;overflow: hidden;">
+                            </label>
+                        </div>
+                    </div>
+                    <a asp-controller="Announcement" asp-action="DeleteAnnouncementImg" asp-route-imgName="@item" class="text-dark">
+                        <i class="la la-2x la-trash del"></i>
+                    </a>
+                </div>
+            }
+            <i class="la la-2x la-plus imgAdd "></i>
+        </div>
+        <div class="alert alert-danger" role="alert" id="alert">
+            Upload at least one image
+        </div>
+        <button type="submit" class="btn btn-success btn-lg btn-block mb-2">Share Announcement</button>
+    </div>
+</form>
+
+@section Scripts
+{
+
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $('#Marka').change(function () {
+                var makeId = $(this).val();
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetModelList", "Announcement")',
+                    dataType: "JSON",
+                    data: { 'id': makeId },
+                    success: function (models) {
+                        $('#Model').empty();
+                        $.each(models, function (i, model) {
+                            $('#Model').append('<option value="' + model.value + '">' + model.text + '</option>');
+                        });
+                    }
+                });
+            });
+            var startYear = 1903;
+            var endYear = new Date().getFullYear();
+            var options = '<option value="">Choose Year</option>';
+            for (var year = endYear; year >= startYear; year--) {
+                if (year == @Model.Year) {
+                    options += '<option selected value="' + year + '">' + year + '</option>';
+                }
+                options += '<option value="' + year + '">' + year + '</option>';
+            }
+            $('#year-dropdown').html(options);
+        });
+
+        $(".imgAdd").click(function () {
+            $(this).closest(".row").find('.imgAdd').before('<div class="col-sm-3 mb-3"><div class="card"><img class="card-img-top uploadImage" "/><div class="card-body"><label class="btn btn-success d-block "><i class="las la-2x la-cloud-upload-alt"></i><input name="images" type="file" class="uploadFile d-block" style="width: 0px;height: 0px;overflow: hidden;"></label></div></div><i class="las la-2x la-trash del"></i></div>');
+        });
+        $(document).on("click", "i.del", function () {
+            $(this).parent().remove();
+        });
+        $(function () {
+            $(document).on("change", ".uploadFile", function () {
+                var uploadFile = $(this);
+                var files = !!this.files ? this.files : [];
+                if (!files.length || !window.FileReader) return;
+
+                if (/^image/.test(files[0].type)) {
+                    var reader = new FileReader();
+                    reader.readAsDataURL(files[0]);
+
+                    reader.onloadend = function () {
+
+                        uploadFile.parents(".card").find(".uploadImage").attr("src", this.result);
+                        $("#alert").hide();
+                    }
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TurboProject</title>
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico">
+    <link rel="stylesheet" href="/css/line-awesome.css" media="print" onload="this.media='all'" asp-append-version="true">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&amp;display=swap" media="print" onload="this.media='all'" asp-append-version="true">
+    <link rel="stylesheet" href="/css/bootstrap.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/selectize.css" media="print" onload="this.media='all'" asp-append-version="true" />
+    <link rel="stylesheet" href="/css/style.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/Web.styles.css" media="print" onload="this.media='all'" asp-append-version="true" />
+    <link rel="stylesheet" href="/lib/sweetalert2/dist/sweetalert2.min.css">
+    <script src="/lib/sweetalert2/dist/sweetalert2.min.js"></script>
+</head>
+<body>
+    <header class="header-area bg-dark shadow-sm">
+        <partial name="_HeaderPartial.cshtml" />
+    </header>
+    <main role="main" class="pb-1">
+        @RenderBody()
+    </main>
+    <footer>
+        <partial name="_FooterPartial" />
+    </footer>
+    <script src="/js/jquery-3.4.1.min.js" asp-append-version="true"></script>
+    <script src="/js/bootstrap.bundle.min.js" async asp-append-version="true"></script>
+    <script src="/js/main.js" async asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

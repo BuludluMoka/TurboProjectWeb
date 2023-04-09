@@ -1,0 +1,50 @@
+﻿@model PagedResponse<List<TurboProject.Models.Entities.FilterAnnouncements>>
+@{
+}
+
+@foreach (var item in Model.Data)
+{
+    <div class="col-lg-3 col-md-4 col-sm-12 d-flex align-items-stretch">
+        <div class="card rounded mb-2">
+            <div class="card-image">
+                <span class="card-notify-year fw-bold">@item.Year</span>
+                <a asp-controller="Announcement" asp-action="DetailAnnouncement" asp-route-id="@item.Id">
+                    <img class="img-fluid " src="~/MediaUpload/@item.Image">
+                </a>
+            </div>
+            <div class="card-body">
+                <h6 style="text-align: left;">@item.MakeName @item.ModelName</h6>
+                <div class="text-right">
+                    <strong>@item.Currency @item.Price</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="row col-12">
+    <div class="pager pt-30px">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination generic-pagination pr-1">
+                <li class="page-item">
+                    <a class="page-link" aria-label="Previous">
+                        <span aria-hidden="true"><i class="la la-arrow-left"></i></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(Model.PageNumber == i? "active" : "")">
+                        <button onclick="paginationSort(@i)" class="page-link pagination-btn btn" type="button">@i</button>
+                    </li>
+                }
+                <li class="page-item">
+                    <a class="page-link" aria-label="Next">
+                        <span aria-hidden="true"><i class="la la-arrow-right"></i></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <p class="fs-13 pt-3">Showing @Model.PageNumber  - @Model.PageSize results of @Model.TotalRecords Car</p>
+    </div>
+</div> 

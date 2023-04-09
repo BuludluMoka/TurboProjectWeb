@@ -1,0 +1,74 @@
+﻿@model List<ListAnnouncementModel>
+@{
+}
+<div class="container">
+    <h3 class="mt-4">My Announcement</h3>
+    <hr class="my-3">
+    <div class="row">
+        <div class="col-md-3 mt-1">
+            <div class="list-group list-group-flush sticky-top shadow mb-3">
+                <div href="#" class="list-group-item list-group-item-action"><i class="fas fa-angle-double-right mx-1"></i>Manage Announcement</div>
+                <div class="list-group-item list-group-item-action active"><i class="fas fa-angle-double-right mx-1 "></i>Announcements</div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="row" id="myItems">
+                @foreach (var item in Model)
+                {
+                    <div id='Announce-@item.Id' class="card mb-3 w-100">
+                        <div class="card-body">
+                            <div class="row no-gutters h-100">
+
+                                <div class="col-md-4">
+                                    <a asp-controller="Announcement" asp-action="DetailAnnouncement" asp-route-id="@item.Id"><img src="~/MediaUpload/@item.Image" class="card-img" alt="..."></a>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5>@item.CarName</h5>
+                                        <p>@item.Year</p>
+                                        <h6 class=" text-right">@item.Currencie @item.Price</h6>
+                                        <p class="text-right">
+                                            <a asp-controller="Announcement" asp-action="EditAnnouncement" asp-route-id="@item.Id" class="btn btn-primary btn-sm"><i class="lar la-2x la-edit"></i></a>
+                                            <button id="DeleteAn" class="btn btn-danger btn-sm" onclick="Turbo.DeleteAnnouncement(@item.Id)"><i class="las la-2x la-trash"></i></button>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            Turbo = {
+                DeleteAnnouncement: function (id) {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.get('@Url.Action("DeleteAnnouncement","Account")', { id: id }, function (resp) {
+                                Swal.fire(
+                                    'Deleted!',
+                                    'Your announcement has been deleted.',
+                                    'success'
+                                );
+                                $("#Announce-"+id).remove();
+
+                            });
+                        }
+                    });
+                }
+            };
+        });
+    </script>
+}

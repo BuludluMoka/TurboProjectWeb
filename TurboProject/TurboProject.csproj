@@ -64,6 +64,7 @@
 
   <ItemGroup>
     <Folder Include="Core\DTOs\" />
+    <Folder Include="wwwroot\MediaUpload\" />
   </ItemGroup>
 
 </Project>

@@ -20,6 +20,6 @@ namespace TurboProject.Core.ViewModels
         public byte BanTypeId { get; set; }
         [Required]
         public byte CurrencyId { get; set; }
-        public List<string> CarImageFiles { get; set; }
+        public List<string>? CarImageFiles { get; set; }
     }
 }

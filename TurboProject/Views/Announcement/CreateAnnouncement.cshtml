@@ -29,7 +29,7 @@
     <div class="col-md-10 offset-md-1">
         <h3 class="mt-2">Announcement Details</h3>
         <hr class="my-3">
-        <div class="text-danger small" asp-validation-summary="All"></div>
+        <div class="text-danger small" asp-validation-summary="ModelOnly"></div>
         <div class="form-row mt-4">
             <div class="col-sm-4 pb-3">
                 <label>Marka</label>
@@ -60,7 +60,7 @@
                         <input type="number" class="form-control" asp-for="Price">
 
                     </div>
-                        <span asp-validation-for="Price" class="text-danger small"></span>
+                    <span asp-validation-for="Price" class="text-danger small"></span>
                 </div>
             </div>
             <div class="col-sm-3 pb-3">
@@ -73,6 +73,8 @@
             </div>
         </div>
         <h3 class="mb-5 mt-5">Announcement Images </h3>
+        <span asp-validation-for="images" class="text-danger small"></span>
+
         <div class="row">
             <div class="col-sm-4 mb-3">
                 <div class="card">

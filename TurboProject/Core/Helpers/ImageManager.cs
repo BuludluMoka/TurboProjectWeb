@@ -33,7 +33,7 @@ namespace Web.Helper
                         string filePath = Path.Combine(uploadsFolder, uniqueImg);
                         using (var image = Image.Load(img.OpenReadStream()))
                         {
-                            string newSize = new ImageCompress().ResizeImage(image, 510, 383);
+                            string newSize = new ImageCompress().ResizeImage(image, 610, 383);
                             string[] aSize = newSize.Split(",");
                             image.Mutate(h => h.Resize(Convert.ToInt32(aSize[1]), Convert.ToInt32(aSize[0])));
                             image.Save(filePath);
